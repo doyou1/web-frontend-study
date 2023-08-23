@@ -7,18 +7,22 @@
       :value="props.item"
       @input="handleInput"
     />
-    <button @click="addTodo" type="button">추가</button>
+    <button type="button" @click="addTodo">추가</button>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="TodoInput">
 const props = defineProps({
   item: {
     type: String,
     required: true,
   },
 });
-const emit = defineEmits(["input", "add"]);
-const handleInput = (e: InputEvent) => {
+const emit = defineEmits<{
+  (e: 'input', value: string): void
+  (e: 'add'): void
+}>()
+
+const handleInput = (e: Event) => {
   //   if (!e.target) return;
   const eventTarget = e.target as HTMLInputElement;
   emit("input", eventTarget.value);
