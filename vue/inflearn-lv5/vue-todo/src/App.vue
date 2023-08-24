@@ -7,7 +7,14 @@
       <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem" />
       <div>
         <ul>
-          <TodoListItem v-for="(item, index) in todoItems" :key="index" :item="item"/>
+          <TodoListItem 
+            v-for="(item, index) in todoItems" 
+            :key="index" 
+            :index="index" 
+            :item="item" 
+            @remove="removeTodoItem" 
+            @toggle="toggleTodoItemDone"
+          />
         </ul>
       </div>
     </main>
@@ -17,29 +24,33 @@
 import { ref, onMounted } from "vue";
 import TodoInput from "@/components/TodoInput.vue";
 import TodoListItem from "@/components/TodoListItem.vue";
+import { Todo } from "@/interfaces/interfaces";
 
 const STORAGE_KEY = "vue-todo-ts-v1";
 const storage = {
-  save(value: any[]) {
+  save(value: Todo[]) {
     const parsed = JSON.stringify(value);
     localStorage.setItem(STORAGE_KEY, parsed);
   },
   fetch() {
       const todoItems = localStorage.getItem(STORAGE_KEY) || "[]";
-      const result =  JSON.parse(todoItems);
+      const result =  JSON.parse(todoItems) as Todo[];
       return result;
-
   }
 };
 
 const todoText = ref("");
-const todoItems = ref([] as any[]);
+const todoItems = ref([] as Todo[]);
 const updateTodoText = (value: string) => {
   todoText.value = value;
 };
 const addTodoItem = () => {
   const value = todoText.value;
-  todoItems.value.push(value);
+  const todo: Todo = {
+    title: value,
+    done: false
+  };
+  todoItems.value.push(todo);
   storage.save(todoItems.value);
   initTodoText();
 };
@@ -49,6 +60,19 @@ const initTodoText = () => {
 
 const fetchTodoItems = () => {
   todoItems.value = storage.fetch();
+}
+
+const removeTodoItem = (index: number) => {
+  todoItems.value.splice(index, 1);
+  storage.save(todoItems.value);
+}
+
+const toggleTodoItemDone = (item: Todo, index: number) => {
+  todoItems.value.splice(index, 1, {
+  ...item,    
+    done: !item.done,
+  });
+  storage.save(todoItems.value);
 }
 
 onMounted(() => {

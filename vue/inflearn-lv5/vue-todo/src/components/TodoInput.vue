@@ -20,7 +20,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: 'input', value: string): void
   (e: 'add'): void
-}>()
+}>();
 
 const handleInput = (e: Event) => {
   //   if (!e.target) return;
