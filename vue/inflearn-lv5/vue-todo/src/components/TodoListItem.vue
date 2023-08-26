@@ -2,7 +2,7 @@
   <li>
     <span 
         class="item" 
-        :class="todoItemClass" 
+        :class="todoItemClass"
         @click="toggleItem">
         {{ props.item.title }}
     </span>

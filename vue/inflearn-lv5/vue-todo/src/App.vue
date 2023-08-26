@@ -32,9 +32,9 @@ const storage = {
     const parsed = JSON.stringify(value);
     localStorage.setItem(STORAGE_KEY, parsed);
   },
-  fetch() {
+  fetch() : Todo[]{
       const todoItems = localStorage.getItem(STORAGE_KEY) || "[]";
-      const result =  JSON.parse(todoItems) as Todo[];
+      const result =  JSON.parse(todoItems);
       return result;
   }
 };
@@ -59,7 +59,11 @@ const initTodoText = () => {
 };
 
 const fetchTodoItems = () => {
-  todoItems.value = storage.fetch();
+  todoItems.value = storage.fetch().sort((a, b) => {
+    if (a.title < b.title) return -1;
+    if (a.title > b.title) return 1;
+    return 0;
+  });
 }
 
 const removeTodoItem = (index: number) => {
