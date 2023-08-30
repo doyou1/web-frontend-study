@@ -2,9 +2,8 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    // "strict": true,
-    "strict": false,
-    "noImplicitAny": false,
+    "strict": true,
+    "noImplicitAny": true,
     "allowJs": true,
     "jsx": "preserve",
     "moduleResolution": "node",
