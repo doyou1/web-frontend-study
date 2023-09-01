@@ -6,8 +6,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { NewsItem, fetchNews } from "@/api";
+import { NewsItem } from "@/api";
 import ListItem from "../components/ListItem.vue";
+import { ActionTypes } from "@/store/actions";
 
 export default Vue.extend({
   components: {
@@ -20,8 +21,8 @@ export default Vue.extend({
   },
   methods: {
     async fecthNewsItems() {
-      const response = await fetchNews();
-      this.newsItems = response.data;
+      const data = await this.$store.dispatch(ActionTypes.FETCH_NEWS);
+      this.newsItems = data;
     },
   },
   created() {
